@@ -6,7 +6,7 @@
 /*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:02:18 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/02/14 14:46:18 by dorianmazar      ###   ########.fr       */
+/*   Updated: 2025/02/16 14:34:09 by dorianmazar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ char	**get_path_env(char **env);
 //parsing.c
 int		is_flag(char *str);
 int		count_flags(char **args, int i);
-char	**command_flags(char **args, int *i);
+char	**command_flags(char **args, int *i, int j, int k);
 t_cmd	*get_commands(char **args);
 
 //switch_fd.c

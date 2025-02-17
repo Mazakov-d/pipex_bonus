@@ -6,7 +6,7 @@
 /*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 14:02:38 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/02/16 14:00:28 by dorianmazar      ###   ########.fr       */
+/*   Updated: 2025/02/16 14:36:33 by dorianmazar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@ int	cmd_outfile(char **cmd_b, char **env, char *outfile, int pipe_fd[2])
 		perror("execve");
 		exit(EXIT_FAILURE);
 	}
-	close(pipe_fd[1]);
-	close(pipe_fd[0]);
+	// close(pipe_fd[1]);
+	// close(pipe_fd[0]);
 	waitpid(pid, NULL, 0);
 	return (free_ptr(path_cmd, 0));
 }

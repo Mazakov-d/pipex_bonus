@@ -6,7 +6,7 @@
 /*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:07:40 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/02/14 14:45:07 by dorianmazar      ###   ########.fr       */
+/*   Updated: 2025/02/16 14:07:12 by dorianmazar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ char	*ft_strndup(char *str, int n)
 	char	*dup;
 	int		i;
 
+	if (n < 0)
+		return (NULL);
 	i = 0;
 	dup = malloc(sizeof(char) * n + 1);
 	if (!dup)

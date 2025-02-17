@@ -6,13 +6,11 @@
 /*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:01:58 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/02/14 14:51:24 by dorianmazar      ###   ########.fr       */
+/*   Updated: 2025/02/16 14:37:18 by dorianmazar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
-
-
 
 int	pipex(char **args, char **env)
 {

@@ -6,11 +6,23 @@
 /*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:04:37 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/02/14 13:18:23 by dorianmazar      ###   ########.fr       */
+/*   Updated: 2025/02/16 14:35:43 by dorianmazar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
+
+int	is_grep(char *str, int *k)
+{
+	if (*k == 0)
+		*k = 1;
+	else
+		return (1);
+	if (str[0] == 'g' && str[1] == 'r' && str[2] == 'e'
+		&& str[3] == 'p')
+		return (0);
+	return (1);
+}
 
 int	is_flag(char *str)
 {
@@ -41,13 +53,11 @@ int	count_flags(char **args, int i)
 	return (count);
 }
 
-char	**command_flags(char **args, int *i)
+char	**command_flags(char **args, int *i, int j, int k)
 {
-	int		j;
 	char	**cmd;
 
-	j = 0;
-	cmd = malloc(sizeof(char *) * (count_flags(args, *i) + 2));
+	cmd = malloc(sizeof(char *) * (count_flags(args, *i) + 3));
 	if (!cmd)
 		return (NULL);
 	cmd[j] = ft_strndup(args[*i], ft_strclen(args[*i], 0));
@@ -57,7 +67,7 @@ char	**command_flags(char **args, int *i)
 	*i = *i + 1;
 	while (args && args[*i])
 	{
-		if (is_flag(args[*i]) == 0)
+		if (is_flag(args[*i]) == 0 || is_grep(cmd[0], &k) == 0)
 		{
 			cmd[j] = ft_strndup(args[*i], ft_strclen(args[*i], 0));
 			if (!cmd[j])
@@ -85,7 +95,7 @@ t_cmd	*get_commands(char **args)
 	j = 0;
 	while (args && args[i])
 	{
-		cmd[j].cmd = command_flags(args, &i);
+		cmd[j].cmd = command_flags(args, &i, 0, 0);
 		j++;
 	}
 	cmd[j].cmd = NULL;
