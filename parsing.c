@@ -6,7 +6,7 @@
 /*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:04:37 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/02/18 16:26:01 by dorianmazar      ###   ########.fr       */
+/*   Updated: 2025/02/18 18:44:34 by dorianmazar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,28 +29,6 @@ int	is_flag(char *str)
 	if (str && str[0] == '-')
 		return (0);
 	return (1);
-}
-int	count_flags(char **args, int i)
-{
-	int	count;
-	int	comp;
-
-	comp = 0;
-	while (args && args[comp])
-		comp++;
-	i++;
-	count = 1;
-	while (args && i <= comp && args[i])
-	{
-		if (is_flag(args[i]) == 0)
-		{
-			count++;
-			i++;
-		}
-		else
-			break ;
-	}
-	return (count);
 }
 
 char	**command_flags(char **args, int *i, int j, int k)

@@ -6,7 +6,7 @@
 /*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:02:18 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/02/18 17:31:47 by dorianmazar      ###   ########.fr       */
+/*   Updated: 2025/02/18 18:47:21 by dorianmazar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,14 @@
 # include <stdlib.h>
 # include <fcntl.h>
 # include <sys/errno.h>
-#include <stdio.h>
+# include <stdio.h>
 
 typedef struct s_cmd
 {
-	char	**cmd;
-	void	*next;
-	void	*prev;
-	int		place;
+	char			**cmd;
+	struct s_cmd	*next;
+	struct s_cmd	*prev;
+	int				place;
 }	t_cmd;
 
 /***free_functions.c*/
@@ -39,6 +39,7 @@ int		ft_strclen(char *str, int c);
 char	*ft_strndup(char *str, int n);
 char	*ft_strcat(char *str, char *s);
 int		count_cmd(char **args);
+int		last_cmd(t_cmd *cmd);
 
 /**path.c*/
 char	*str_dup_c(char *str, char c_limit, char c_join);
@@ -62,13 +63,11 @@ void	switch_fd_in_out(int fd_a, int fd_b);
 /**executing.c*/
 int		cmd_infile(char **cmd_a, char **env, char *infile, int pipe_fd[2]);
 int		cmd_outfile(char **cmd_b, char **env, char *outfile, int pipe_fd[2]);
-int		cmd_to_pipe(char **cmd, char **env, int pipe_fd[2]);
+int		cmd_to_pipe(char **cmd, char **env, int prev_pipe[2], int next_pipe[2]);
 int		one_cmd(t_cmd *cmd, char **env, char *infile, char *outifle);
 
 /**cmd_path.c*/
 int		index_path_cmd(char *cmd, char **path);
 char	*get_path_cmd(char *cmd, char **path);
-
-
 
 #endif

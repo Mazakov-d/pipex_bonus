@@ -6,7 +6,7 @@
 /*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:07:40 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/02/16 14:07:12 by dorianmazar      ###   ########.fr       */
+/*   Updated: 2025/02/18 18:40:01 by dorianmazar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,4 +85,18 @@ int	count_cmd(char **args)
 		}
 	}
 	return (count);
+}
+
+int	last_cmd(t_cmd *cmd)
+{
+	t_cmd	*save;
+	int		i;
+
+	save = cmd;
+	i = 0;
+	while (cmd->next)
+		cmd = cmd->next;
+	cmd = cmd->prev;
+	i = cmd->place;
+	return (i);
 }

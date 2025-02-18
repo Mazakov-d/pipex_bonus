@@ -6,11 +6,34 @@
 /*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 13:29:16 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/02/14 13:29:43 by dorianmazar      ###   ########.fr       */
+/*   Updated: 2025/02/18 18:45:44 by dorianmazar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
+
+int	count_flags(char **args, int i)
+{
+	int	count;
+	int	comp;
+
+	comp = 0;
+	while (args && args[comp])
+		comp++;
+	i++;
+	count = 1;
+	while (args && i <= comp && args[i])
+	{
+		if (is_flag(args[i]) == 0)
+		{
+			count++;
+			i++;
+		}
+		else
+			break ;
+	}
+	return (count);
+}
 
 int	index_path_cmd(char *cmd, char **path)
 {
@@ -30,7 +53,7 @@ int	index_path_cmd(char *cmd, char **path)
 		if (access(path_cmd, F_OK) == 0 && access(path_cmd, X_OK) == 0)
 		{
 			free(path_cmd);
-			free_strs(splited_cmd);	
+			free_strs(splited_cmd);
 			return (i);
 		}
 		free(path_cmd);
@@ -50,7 +73,7 @@ char	*get_path_cmd(char *cmd, char **path)
 		if (path)
 			free_strs(path);
 		return (NULL);
-	} 
+	}
 	i = index_path_cmd(cmd, path);
 	if (i == -1)
 	{
@@ -66,4 +89,3 @@ char	*get_path_cmd(char *cmd, char **path)
 	free_strs(path);
 	return (path_cmd);
 }
-
