@@ -6,16 +6,11 @@
 /*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 22:56:32 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/02/14 15:06:41 by dorianmazar      ###   ########.fr       */
+/*   Updated: 2025/02/18 17:29:02 by dorianmazar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
-
-int fd_is_valid(int fd)
-{
-    return (fcntl(fd, F_GETFD) != -1 || errno != EBADF);
-}
 
 void	*free_strs(char **strs)
 {
@@ -34,30 +29,39 @@ void	*free_strs(char **strs)
 	return (NULL);
 }
 
-int	free_cmds_fd(t_cmd *cmds, int pipe_fd[2], int k)
+void	*free_cmd(t_cmd *cmd)
 {
-	int	i;
-	int	j;
+	t_cmd	*save;
 
-	i = 0;
-	if (cmds)
+	while (cmd->prev)
+		cmd = cmd->prev;
+	while (cmd)
 	{
-		while (cmds && cmds[i].cmd)
-		{
-			free_strs(cmds[i].cmd);
-			free(cmds + i);
-		}
+		save = cmd;
+		free_strs(cmd->cmd);
+		cmd = cmd->next;
+		free(save);
 	}
-	if (fd_is_valid(pipe_fd[0]) == 0)
-		close(pipe_fd[0]);
-	if (fd_is_valid(pipe_fd[1]) == 0)
-		close (pipe_fd[1]);
-	return (k);
+	return (NULL);
+}
+
+int	free_cmd_int(t_cmd *cmd)
+{
+	free_cmd(cmd);
+	return (1);
 }
 
 int	free_ptr(void *ptr, int i)
 {
 	if (ptr)
 		free(ptr);
+	return (i);
+}
+
+int	free_cmd_fd(t_cmd *cmd, int pipe_fd[2], int i)
+{
+	free_cmd(cmd);
+	close(pipe_fd[0]);
+	close(pipe_fd[1]);
 	return (i);
 }

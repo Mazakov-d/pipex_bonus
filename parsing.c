@@ -6,7 +6,7 @@
 /*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:04:37 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/02/16 14:35:43 by dorianmazar      ###   ########.fr       */
+/*   Updated: 2025/02/18 16:26:01 by dorianmazar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,22 +82,47 @@ char	**command_flags(char **args, int *i, int j, int k)
 	return (cmd);
 }
 
+t_cmd	*new_cmd(t_cmd *actu, int i)
+{
+	void	*save;
+	t_cmd	*next;
+
+	next = malloc(sizeof(t_cmd));
+	if (!next)
+		return (NULL);
+	if (i == 0)
+		actu->prev = NULL;
+	actu->next = next;
+	actu->place = i;
+	save = actu;
+	actu = next;
+	actu->prev = save;
+	actu->cmd = NULL;
+	actu->next = NULL;
+	return (actu);
+}
+
 t_cmd	*get_commands(char **args)
 {
 	t_cmd	*cmd;
+	t_cmd	*save;
 	int		i;
 	int		j;
 
-	cmd = malloc(sizeof(t_cmd) * (count_cmd(args) + 2));
+	cmd = malloc(sizeof(t_cmd));
 	if (!cmd)
 		return (NULL);
+	save = cmd;
 	i = 0;
 	j = 0;
-	while (args && args[i])
+	while (args && args[i] && args[i + 1])
 	{
-		cmd[j].cmd = command_flags(args, &i, 0, 0);
+		cmd->cmd = command_flags(args, &i, 0, 0);
+		cmd = new_cmd(cmd, j);
+		if (!cmd)
+			return (free_cmd(save));
 		j++;
 	}
-	cmd[j].cmd = NULL;
-	return (cmd);
+	cmd->next = NULL;
+	return (save);
 }

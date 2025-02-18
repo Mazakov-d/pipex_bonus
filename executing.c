@@ -6,7 +6,7 @@
 /*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 14:02:38 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/02/16 14:36:33 by dorianmazar      ###   ########.fr       */
+/*   Updated: 2025/02/18 18:17:46 by dorianmazar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ int	cmd_infile(char **cmd_a, char **env, char *infile, int pipe_fd[2])
 		perror("execve");
 		exit(EXIT_FAILURE);
 	}
-	// close(pipe_fd[1]);
 	waitpid(pid, NULL, 0);
 	return (free_ptr(path_cmd, 0));
 }
@@ -63,8 +62,8 @@ int	cmd_outfile(char **cmd_b, char **env, char *outfile, int pipe_fd[2])
 		perror("execve");
 		exit(EXIT_FAILURE);
 	}
-	// close(pipe_fd[1]);
-	// close(pipe_fd[0]);
+	close(pipe_fd[1]);
+	close(pipe_fd[0]);
 	waitpid(pid, NULL, 0);
 	return (free_ptr(path_cmd, 0));
 }
@@ -92,4 +91,24 @@ int	cmd_to_pipe(char **cmd, char **env, int pipe_fd[2])
 	}
 	waitpid(pid, NULL, 0);
 	return (free_ptr(path_cmd, 0));
+}
+
+int	one_cmd(t_cmd *cmd, char **env, char *infile, char *outfile)
+{
+	char	*path_cmd;
+	
+	path_cmd = get_path_cmd(cmd->cmd[0], get_path_env(env));
+	if (!path_cmd)
+		return (free_cmd_int(cmd));
+	if (open_switch_in_out(infile, outfile)== 1)
+	{
+		free(path_cmd);
+		return (free_cmd_int(cmd));
+	}
+	execve(path_cmd, cmd->cmd, env);
+	free(path_cmd);
+	perror("execve");
+	exit(EXIT_FAILURE);
+	free_cmd(cmd);
+	return (0);
 }
