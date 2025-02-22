@@ -6,7 +6,7 @@
 /*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:01:58 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/02/18 18:46:17 by dorianmazar      ###   ########.fr       */
+/*   Updated: 2025/02/22 13:34:56 by dorianmazar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ int	init_pipex(t_cmd **cmds, char **args, int *i)
 	return (0);
 }
 
-int	handle_single_cmd(t_cmd *cmds, char **env, char **args, char *outfile)
+int	handle_single_cmd(t_cmd *cmds, char **env, char *infile, char *outfile)
 {
-	if (one_cmd(cmds, env, args[0], outfile) == 1)
+	if (one_cmd(cmds, env, infile, outfile) == 1)
 		return (free_cmd_int(cmds));
 	return (0);
 }
@@ -37,7 +37,7 @@ int	handle_first_cmd(t_cmd *cmds, char **env, int *fd, char *infile)
 	return (0);
 }
 
-int	pipex(char **args, char **env, char *outfile)
+int	pipex(char **args, char **env, char *outfile, char *infile)
 {
 	t_cmd	*cmds;
 	int		pipe_fd[2];
@@ -47,8 +47,8 @@ int	pipex(char **args, char **env, char *outfile)
 	if (init_pipex(&cmds, args, &i) == 1)
 		return (1);
 	if (i == 1)
-		return (handle_single_cmd(cmds, env, args, outfile));
-	if (handle_first_cmd(cmds, env, pipe_fd, args[0]) != 0)
+		return (handle_single_cmd(cmds, env, infile, outfile));
+	if (handle_first_cmd(cmds, env, pipe_fd, infile) != 0)
 		return (1);
 	while (cmds->next && --i > 1)
 	{
@@ -69,13 +69,23 @@ int	pipex(char **args, char **env, char *outfile)
 int	main(int ac, char **av, char **env)
 {
 	int	i;
+	int	save;
 
 	if (ac > 2)
 	{
 		i = 0;
 		while (av[i])
 			i++;
-		if (pipex((av + 1), env, (av[i - 1])) == 1)
+		save = here_doc(av + 1);
+		if (save > 0)
+		{
+			if (pipex((av + 2), env, av[i - 1], ".temp_here_doc.txt") == 1)
+				write(2, "Error\n", 7);
+			unlink(".temp_here_doc.txt");
+		}
+		else if (save == -1)
+			write(2, "Error\n", 7);
+		else if (pipex((av + 1), env, (av[i - 1]), av[1]) == 1)
 			write(2, "Error\n", 7);
 	}
 }

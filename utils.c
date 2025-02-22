@@ -6,7 +6,7 @@
 /*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:07:40 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/02/18 18:40:01 by dorianmazar      ###   ########.fr       */
+/*   Updated: 2025/02/22 13:02:01 by dorianmazar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,25 +22,25 @@ int	ft_strclen(char *str, int c)
 	return (i);
 }
 
-char	*ft_strndup(char *str, int n)
-{
-	char	*dup;
-	int		i;
+// char	*ft_strndup(char *str, int n)
+// {
+// 	char	*dup;
+// 	int		i;
 
-	if (n < 0)
-		return (NULL);
-	i = 0;
-	dup = malloc(sizeof(char) * n + 1);
-	if (!dup)
-		return (NULL);
-	while (str && str[i] && i < n)
-	{
-		dup[i] = str[i];
-		i++;
-	}
-	dup[i] = 0;
-	return (dup);
-}
+// 	if (n < 0)
+// 		return (NULL);
+// 	i = 0;
+// 	dup = malloc(sizeof(char) * n + 1);
+// 	if (!dup)
+// 		return (NULL);
+// 	while (str && str[i] && i < n)
+// 	{
+// 		dup[i] = str[i];
+// 		i++;
+// 	}
+// 	dup[i] = 0;
+// 	return (dup);
+// }
 
 char	*ft_strcat(char *str, char *s)
 {

@@ -6,7 +6,7 @@
 /*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:02:18 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/02/18 18:47:21 by dorianmazar      ###   ########.fr       */
+/*   Updated: 2025/02/22 13:30:34 by dorianmazar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <fcntl.h>
 # include <sys/errno.h>
 # include <stdio.h>
+# include "get_next_line.h"
 
 typedef struct s_cmd
 {
@@ -36,7 +37,6 @@ int		free_cmd_fd(t_cmd *cmd, int pipe_fd[2], int i);
 
 /**utils.c*/
 int		ft_strclen(char *str, int c);
-char	*ft_strndup(char *str, int n);
 char	*ft_strcat(char *str, char *s);
 int		count_cmd(char **args);
 int		last_cmd(t_cmd *cmd);
@@ -69,5 +69,10 @@ int		one_cmd(t_cmd *cmd, char **env, char *infile, char *outifle);
 /**cmd_path.c*/
 int		index_path_cmd(char *cmd, char **path);
 char	*get_path_cmd(char *cmd, char **path);
+
+/**here_doc.c */
+int		is_here_doc(char *str);
+int		is_limiter(char *str, char *limiter);
+int		here_doc(char **args);
 
 #endif
