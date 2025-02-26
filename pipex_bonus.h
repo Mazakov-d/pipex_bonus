@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
+/*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:02:18 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/02/22 13:30:34 by dorianmazar      ###   ########.fr       */
+/*   Updated: 2025/02/26 15:44:39 by dmazari          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <stdlib.h>
 # include <fcntl.h>
 # include <sys/errno.h>
+# include <sys/wait.h>
 # include <stdio.h>
 # include "get_next_line.h"
 
@@ -32,8 +33,8 @@ typedef struct s_cmd
 void	*free_strs(char **strs);
 void	*free_cmd(t_cmd *cmd);
 int		free_cmd_int(t_cmd *cmd);
-int		free_ptr(void *ptr, int i);
-int		free_cmd_fd(t_cmd *cmd, int pipe_fd[2], int i);
+int		free_ptr(void *ptr, int i, char *error);
+int		free_cmd_fd(t_cmd *cmd, int pipe_fd[2], int i, char *error);
 
 /**utils.c*/
 int		ft_strclen(char *str, int c);
@@ -74,5 +75,8 @@ char	*get_path_cmd(char *cmd, char **path);
 int		is_here_doc(char *str);
 int		is_limiter(char *str, char *limiter);
 int		here_doc(char **args);
+
+/**str_error.c */
+void	*error_malloc(void);
 
 #endif

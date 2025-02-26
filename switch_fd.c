@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   switch_fd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
+/*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 13:25:03 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/02/18 18:45:52 by dorianmazar      ###   ########.fr       */
+/*   Updated: 2025/02/26 15:35:44 by dmazari          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,10 @@ int	open_switch_stdin(char *file)
 
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
+	{
+		write(2, "Error : can't read infile\n", 27);
 		return (1);
+	}
 	dup2(fd, STDIN_FILENO);
 	close(fd);
 	return (0);
@@ -30,7 +33,10 @@ int	open_switch_stdout(char *file)
 
 	fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (fd < 0)
+	{
+		write(2, "Error : outfile\n", 17);
 		return (1);
+	}
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
 	return (0);

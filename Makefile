@@ -14,6 +14,7 @@ SRC = main.c					\
 		here_doc.c				\
 		get_next_line.c			\
 		get_next_line_utils.c	\
+		str_error.c				\
 
 HEADER = pipex_bonus.h	\
 		get_next_line.h	\

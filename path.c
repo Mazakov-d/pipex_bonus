@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
+/*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:40:34 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/02/11 15:40:59 by dorianmazar      ###   ########.fr       */
+/*   Updated: 2025/02/26 15:33:14 by dmazari          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	find_path_string(char **env)
 	int	i;
 
 	i = 0;
-	while (env[i])
+	while (env && env[i])
 	{
 		if (env[i][0] == 'P' && env[i][1] == 'A' && env[i][2] == 'T'
 		&& env[i][3] == 'H' && env[i][4] == '=')
@@ -73,7 +73,7 @@ char	**split_c(char	*str, char c_limit, char c_join)
 
 	strs = malloc(sizeof(char *) * count_str_c_limit(str, c_limit) * 2);
 	if (!strs)
-		return (NULL);
+		return (error_malloc());
 	i = 0;
 	while (*str)
 	{
@@ -96,6 +96,11 @@ char	**get_path_env(char **env)
 	char	**path;
 
 	i = find_path_string(env);
+	if (i == -1)
+	{
+		write(2, "Error : didn't find the path\n", 30);
+		return (NULL);
+	}
 	path = split_c(env[i] + 5, ':', '/');
 	if (!path)
 		return (NULL);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executing.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
+/*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 14:02:38 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/02/18 19:38:50 by dorianmazar      ###   ########.fr       */
+/*   Updated: 2025/02/26 16:11:04 by dmazari          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ int	cmd_infile(char **cmd_a, char **env, char *infile, int pipe_fd[2])
 	if (!path_cmd)
 		return (1);
 	if (open_switch_stdin(infile) == 1)
-		return (free_ptr(path_cmd, 1));
+		return (free_ptr(path_cmd, 1, NULL));
 	pid = fork();
 	if (pid < 0)
-		return (free_ptr(path_cmd, 1));
+		return (free_ptr(path_cmd, 1, "Error : fork\n"));
 	if (pid == 0)
 	{
 		close(pipe_fd[0]);
@@ -36,7 +36,7 @@ int	cmd_infile(char **cmd_a, char **env, char *infile, int pipe_fd[2])
 		exit(EXIT_FAILURE);
 	}
 	waitpid(pid, NULL, 0);
-	return (free_ptr(path_cmd, 0));
+	return (free_ptr(path_cmd, 0, NULL));
 }
 
 int	cmd_outfile(char **cmd_b, char **env, char *outfile, int pipe_fd[2])
@@ -48,10 +48,10 @@ int	cmd_outfile(char **cmd_b, char **env, char *outfile, int pipe_fd[2])
 	if (!path_cmd)
 		return (1);
 	if (open_switch_stdout(outfile) == 1)
-		return (free_ptr(path_cmd, 1));
+		return (free_ptr(path_cmd, 1, NULL));
 	pid = fork();
 	if (pid < 0)
-		return (free_ptr(path_cmd, 1));
+		return (free_ptr(path_cmd, 1, "Error : fork\n"));
 	if (pid == 0)
 	{
 		close(pipe_fd[1]);
@@ -65,7 +65,7 @@ int	cmd_outfile(char **cmd_b, char **env, char *outfile, int pipe_fd[2])
 	close(pipe_fd[1]);
 	close(pipe_fd[0]);
 	waitpid(pid, NULL, 0);
-	return (free_ptr(path_cmd, 0));
+	return (free_ptr(path_cmd, 0, NULL));
 }
 
 int	handle_child_pipe(char **cmd, char **env, int *prev, int *next)
@@ -98,13 +98,19 @@ int	cmd_to_pipe(char **cmd, char **env, int prev[2], int next[2])
 		return (1);
 	pid = fork();
 	if (pid < 0)
-		return (free_ptr(path_cmd, 1));
+		return (free_ptr(path_cmd, 1, "Error : fork"));
 	if (pid == 0)
-		handle_child_pipe(cmd, env, prev, next);
+	{
+		if (handle_child_pipe(cmd, env, prev, next) == 1)
+		{
+			write(2, "Error : didn't fing the Path for command\n", 42);
+			return (1);
+		}
+	}
 	close(prev[0]);
 	close(prev[1]);
 	waitpid(pid, NULL, 0);
-	return (free_ptr(path_cmd, 0));
+	return (free_ptr(path_cmd, 0, NULL));
 }
 
 int	one_cmd(t_cmd *cmd, char **env, char *infile, char *outfile)
@@ -126,4 +132,3 @@ int	one_cmd(t_cmd *cmd, char **env, char *infile, char *outfile)
 	free_cmd(cmd);
 	return (0);
 }
- 

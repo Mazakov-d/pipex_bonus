@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
+/*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 13:29:16 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/02/18 18:45:44 by dorianmazar      ###   ########.fr       */
+/*   Updated: 2025/02/26 15:37:25 by dmazari          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ int	index_path_cmd(char *cmd, char **path)
 		free(path_cmd);
 		i++;
 	}
+	write(2, "Error : didn't find the command in Path\n", 41);
 	free_strs(splited_cmd);
 	return (-1);
 }
