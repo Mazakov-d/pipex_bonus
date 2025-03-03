@@ -1,40 +1,44 @@
-NAME = pipex_bonus
+NAME = pipex
+NAME_BONUS = pipex_bonus
 
-CC = cc
-CFLAGS = -Wall -Werror -Wextra
+F_PIPEX_DIR = f_pipex
+F_PIPEX_BONUS_DIR = f_pipex_bonus
 
-SRC = main.c					\
-		path.c					\
-		cmd_path.c				\
-		free_functions.c		\
-		executing.c				\
-		parsing.c				\
-		switch_fd.c				\
-		utils.c					\
-		here_doc.c				\
-		get_next_line.c			\
-		get_next_line_utils.c	\
-		str_error.c				\
-
-HEADER = pipex_bonus.h	\
-		get_next_line.h	\
-
-OBJ = $(SRC:.c=.o)
+F_PIPEX_BUILD = $(F_PIPEX_DIR)/.build_complete
+F_PIPEX_BONUS_BUILD = $(F_PIPEX_BONUS_DIR)/.build_complete
 
 all: $(NAME)
 
-$(NAME) : $(OBJ) Makefile
-	$(CC) $(OBJ) -o $(NAME)
+$(NAME): $(F_PIPEX_BUILD)
+	@touch $(F_PIPEX_BUILD)
 
-%.o: %.c $(HEADER)
-	$(CC) $(CCF) -c $< -o $@
+$(F_PIPEX_BUILD): FORCE
+	$(MAKE) -C $(F_PIPEX_DIR)
+	@touch $@
+
+bonus: $(NAME_BONUS)
+
+$(NAME_BONUS): $(F_PIPEX_BONUS_BUILD)
+	@touch $(F_PIPEX_BONUS_BUILD)
+
+$(F_PIPEX_BONUS_BUILD): FORCE
+	$(MAKE) -C $(F_PIPEX_BONUS_DIR) 
+	@touch $@
 
 clean:
-	rm -f $(OBJ)
+	$(MAKE) -C $(F_PIPEX_DIR) clean
+	$(MAKE) -C $(F_PIPEX_BONUS_DIR) clean
+	@rm -f $(F_PIPEX_BUILD) $(F_PIPEX_BONUS_BUILD)
 
-fclean: clean
-	rm -f $(NAME)
+fclean:
+	$(MAKE) -C $(F_PIPEX_DIR) fclean
+	$(MAKE) -C $(F_PIPEX_BONUS_DIR) fclean
+	@rm -f $(F_PIPEX_BUILD) $(F_PIPEX_BONUS_BUILD)
 
-re:	fclean all
+re: fclean all
 
-.PHONY: all clean fclean re
+re_bonus: fclean bonus
+
+FORCE:
+
+.PHONY: all bonus clean fclean re re_bonus FORCE
