@@ -6,7 +6,7 @@
 /*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:07:40 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/03/04 16:36:58 by dmazari          ###   ########.fr       */
+/*   Updated: 2025/03/04 16:44:04 by dmazari          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,14 +69,13 @@ int	count_cmd(char **args)
 
 int	last_cmd(t_cmd *cmd)
 {
-	t_cmd	*save;
-	int		i;
+	int	i;
 
-	save = cmd;
 	i = 0;
 	while (cmd->next)
+	{
 		cmd = cmd->next;
-	cmd = cmd->prev;
-	i = cmd->place;
+		i++;
+	}
 	return (i);
 }

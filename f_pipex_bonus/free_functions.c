@@ -6,7 +6,7 @@
 /*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 22:56:32 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/03/03 15:53:31 by dmazari          ###   ########.fr       */
+/*   Updated: 2025/03/04 16:46:36 by dmazari          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ void	*free_cmd(t_cmd *cmd)
 	t_cmd	*save;
 	t_cmd	*head;
 
+	if (!cmd)
+		return (NULL);
 	head = cmd;
 	while (head && head->prev)
 		head = head->prev;
@@ -68,8 +70,11 @@ int	free_cmd_fd(t_cmd *cmd, int pipe_fd[2], int i, char *error)
 {
 	if (error)
 		write(2, error, ft_strlen(error));
+	if (pipe_fd)
+	{
+		close(pipe_fd[0]);
+		close(pipe_fd[1]);
+	}
 	free_cmd(cmd);
-	close(pipe_fd[0]);
-	close(pipe_fd[1]);
 	return (i);
 }

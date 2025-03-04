@@ -6,7 +6,7 @@
 /*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 13:02:19 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/03/03 15:56:36 by dmazari          ###   ########.fr       */
+/*   Updated: 2025/03/04 16:45:50 by dmazari          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	here_doc_error(int i)
 {
-	write(2, "Error : can't create temp_here_doc", 35);
+	perror("Error: Cannot create temporary file for here_doc");
 	return (i);
 }
 
@@ -46,9 +46,10 @@ int	here_doc(char **args)
 	char	*line;
 	int		fd;
 
-	fd = open(".temp_here_doc.txt", O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	fd = open(".temp_here_doc.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
 		return (here_doc_error(-1));
+	write(1, "heredoc> ", 9);
 	line = get_next_line(0);
 	while (line)
 	{
@@ -61,6 +62,7 @@ int	here_doc(char **args)
 			break ;
 		write(fd, line, ft_strlen(line));
 		free(line);
+		write(1, "heredoc> ", 9);
 		line = get_next_line(0);
 	}
 	if (line)

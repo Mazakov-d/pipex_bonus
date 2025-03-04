@@ -6,7 +6,7 @@
 /*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 14:02:38 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/03/04 16:35:22 by dmazari          ###   ########.fr       */
+/*   Updated: 2025/03/04 16:45:15 by dmazari          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,12 @@ void	child_process_first(char **cmd_a, char **env,
 		execve(path_cmd, cmd_a, env);
 		free(path_cmd);
 	}
+	else if (cmd_a[0] && (cmd_a[0][0] == '/' || 
+		(cmd_a[0][0] == '.' && cmd_a[0][1] == '/')))
+		execve(cmd_a[0], cmd_a, env);
 	if (paths)
 		free_strs(paths);
+	perror("Error: Command not found");
 	exit(EXIT_FAILURE);
 }
 
@@ -72,8 +76,12 @@ void	child_process_last(char **cmd_b, char **env,
 		execve(path_cmd, cmd_b, env);
 		free(path_cmd);
 	}
+	else if (cmd_b[0] && (cmd_b[0][0] == '/' || 
+		(cmd_b[0][0] == '.' && cmd_b[0][1] == '/')))
+		execve(cmd_b[0], cmd_b, env);
 	if (paths)
 		free_strs(paths);
+	perror("Error: Command not found");
 	exit(EXIT_FAILURE);
 }
 
@@ -117,6 +125,7 @@ int	cmd_to_pipe(char **cmd, char **env, int prev[2], int next[2])
 			free(path_cmd);
 		if (paths)
 			free_strs(paths);
+		perror("Error: Command not found");
 		exit(EXIT_FAILURE);
 	}
 	close(prev[0]);
@@ -139,8 +148,11 @@ int	one_cmd(t_cmd *cmd, char **env, char *infile, char *outfile)
 		execve(path_cmd, cmd->cmd, env);
 		free(path_cmd);
 	}
+	else if (cmd->cmd[0] && (cmd->cmd[0][0] == '/' || 
+		(cmd->cmd[0][0] == '.' && cmd->cmd[0][1] == '/')))
+		execve(cmd->cmd[0], cmd->cmd, env);
 	if (paths)
 		free_strs(paths);
+	perror("Error: Command not found");
 	exit(EXIT_FAILURE);
-	return (0);
 }
