@@ -6,7 +6,7 @@
 /*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:07:40 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/03/04 16:44:04 by dmazari          ###   ########.fr       */
+/*   Updated: 2025/03/04 17:54:22 by dmazari          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int	ft_strclen(char *str, int c)
 		i++;
 	return (i);
 }
+
 
 char	*ft_strcat(char *str, char *s)
 {
@@ -72,7 +73,7 @@ int	last_cmd(t_cmd *cmd)
 	int	i;
 
 	i = 0;
-	while (cmd->next)
+	while (cmd && cmd->next)
 	{
 		cmd = cmd->next;
 		i++;

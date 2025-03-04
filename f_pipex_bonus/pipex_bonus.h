@@ -6,7 +6,7 @@
 /*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:02:18 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/03/04 16:36:02 by dmazari          ###   ########.fr       */
+/*   Updated: 2025/03/04 17:59:19 by dmazari          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 	struct s_cmd	*prev;
 	int				place;
+	int				pipe_in[2];
+	int				pipe_out[2];
 }	t_cmd;
 
 /***free_functions.c*/
@@ -67,6 +69,7 @@ void	child_process_first(char **cmd_a, char **env,
 			char *infile, int pipe_fd[2]);
 void	child_process_last(char **cmd_b, char **env, 
 			char *outfile, int pipe_fd[2]);
+void	child_process_pipe(char **cmd, char **env, int prev[2], int next[2]);
 int		cmd_infile(char **cmd_a, char **env, char *infile, int pipe_fd[2]);
 int		cmd_outfile(char **cmd_b, char **env, char *outfile, int pipe_fd[2]);
 int		cmd_to_pipe(char **cmd, char **env, int prev_pipe[2], int next_pipe[2]);
@@ -80,6 +83,10 @@ char	*get_path_cmd(char *cmd, char **path);
 int		is_here_doc(char *str);
 int		is_limiter(char *str, char *limiter);
 int		here_doc(char **args);
+
+/**main.c*/
+int		process_middle_cmds(t_cmd **cmds, char **env, int *i, int pipe_fd[2]);
+void	wait_all_children(void);
 
 /**str_error.c */
 void	*error_malloc(void);

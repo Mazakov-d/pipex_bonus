@@ -6,7 +6,7 @@
 /*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:40:34 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/02/26 15:33:14 by dmazari          ###   ########.fr       */
+/*   Updated: 2025/03/04 17:54:05 by dmazari          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ char	*str_dup_c(char *str, char c_limit, char c_join)
 	char	*new_str;
 	int		i;
 
+	if (!str)
+		return (NULL);
 	i = 0;
 	while (str[i] && str[i] != c_limit)
 		i++;
@@ -40,6 +42,8 @@ int	count_str_c_limit(char *str, char c_limit)
 	int	i;
 	int	count;
 
+	if (!str)
+		return (0);
 	i = 0;
 	count = 1;
 	while (str[i])
@@ -70,8 +74,12 @@ char	**split_c(char	*str, char c_limit, char c_join)
 {
 	char	**strs;
 	int		i;
+	int		str_count;
 
-	strs = malloc(sizeof(char *) * count_str_c_limit(str, c_limit) * 2);
+	if (!str)
+		return (NULL);
+	str_count = count_str_c_limit(str, c_limit);
+	strs = malloc(sizeof(char *) * (str_count + 1));
 	if (!strs)
 		return (error_malloc());
 	i = 0;
@@ -98,7 +106,6 @@ char	**get_path_env(char **env)
 	i = find_path_string(env);
 	if (i == -1)
 	{
-		write(2, "Error : didn't find the path\n", 30);
 		return (NULL);
 	}
 	path = split_c(env[i] + 5, ':', '/');

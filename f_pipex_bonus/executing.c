@@ -6,7 +6,7 @@
 /*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 14:02:38 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/03/04 16:45:15 by dmazari          ###   ########.fr       */
+/*   Updated: 2025/03/04 17:58:57 by dmazari          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,9 @@ void	child_process_first(char **cmd_a, char **env,
 	dup2(pipe_fd[1], STDOUT_FILENO);
 	close(pipe_fd[1]);
 	paths = get_path_env(env);
-	path_cmd = get_path_cmd(cmd_a[0], paths);
+	path_cmd = NULL;
+	if (paths)
+		path_cmd = get_path_cmd(cmd_a[0], paths);
 	if (path_cmd)
 	{
 		execve(path_cmd, cmd_a, env);
@@ -38,7 +40,6 @@ void	child_process_first(char **cmd_a, char **env,
 		execve(cmd_a[0], cmd_a, env);
 	if (paths)
 		free_strs(paths);
-	perror("Error: Command not found");
 	exit(EXIT_FAILURE);
 }
 
@@ -70,7 +71,9 @@ void	child_process_last(char **cmd_b, char **env,
 	dup2(pipe_fd[0], STDIN_FILENO);
 	close(pipe_fd[0]);
 	paths = get_path_env(env);
-	path_cmd = get_path_cmd(cmd_b[0], paths);
+	path_cmd = NULL;
+	if (paths)
+		path_cmd = get_path_cmd(cmd_b[0], paths);
 	if (path_cmd)
 	{
 		execve(path_cmd, cmd_b, env);
@@ -81,7 +84,6 @@ void	child_process_last(char **cmd_b, char **env,
 		execve(cmd_b[0], cmd_b, env);
 	if (paths)
 		free_strs(paths);
-	perror("Error: Command not found");
 	exit(EXIT_FAILURE);
 }
 
@@ -96,41 +98,54 @@ int	cmd_outfile(char **cmd_b, char **env, char *outfile, int pipe_fd[2])
 		child_process_last(cmd_b, env, outfile, pipe_fd);
 	close(pipe_fd[0]);
 	waitpid(pid, NULL, 0);
-	waitpid(-1, NULL, 0);
 	return (0);
+}
+
+void	child_process_pipe(char **cmd, char **env, int prev[2], int next[2])
+{
+	char	**paths;
+	char	*path_cmd;
+
+	dup2(prev[0], STDIN_FILENO);
+	dup2(next[1], STDOUT_FILENO);
+	close(prev[0]);
+	close(prev[1]);
+	close(next[0]);
+	close(next[1]);
+	paths = get_path_env(env);
+	path_cmd = NULL;
+	if (paths)
+		path_cmd = get_path_cmd(cmd[0], paths);
+	if (path_cmd)
+	{
+		execve(path_cmd, cmd, env);
+		free(path_cmd);
+	}
+	else if (cmd[0] && (cmd[0][0] == '/' || 
+		(cmd[0][0] == '.' && cmd[0][1] == '/')))
+		execve(cmd[0], cmd, env);
+	if (paths)
+		free_strs(paths);
+	exit(EXIT_FAILURE);
 }
 
 int	cmd_to_pipe(char **cmd, char **env, int prev[2], int next[2])
 {
 	int		pid;
-	char	**paths;
-	char	*path_cmd;
 
 	pid = fork();
 	if (pid < 0)
-		return (1);
-	if (pid == 0)
 	{
+		close(prev[0]);
 		close(prev[1]);
 		close(next[0]);
-		dup2(prev[0], STDIN_FILENO);
-		dup2(next[1], STDOUT_FILENO);
-		close(prev[0]);
 		close(next[1]);
-		paths = get_path_env(env);
-		path_cmd = get_path_cmd(cmd[0], paths);
-		if (path_cmd)
-			execve(path_cmd, cmd, env);
-		if (path_cmd)
-			free(path_cmd);
-		if (paths)
-			free_strs(paths);
-		perror("Error: Command not found");
-		exit(EXIT_FAILURE);
+		return (1);
 	}
+	if (pid == 0)
+		child_process_pipe(cmd, env, prev, next);
 	close(prev[0]);
 	close(prev[1]);
-	waitpid(pid, NULL, 0);
 	return (0);
 }
 
@@ -142,7 +157,9 @@ int	one_cmd(t_cmd *cmd, char **env, char *infile, char *outfile)
 	if (open_switch_in_out(infile, outfile) == 1)
 		return (free_cmd_int(cmd));
 	paths = get_path_env(env);
-	path_cmd = get_path_cmd(cmd->cmd[0], paths);
+	path_cmd = NULL;
+	if (paths)
+		path_cmd = get_path_cmd(cmd->cmd[0], paths);
 	if (path_cmd)
 	{
 		execve(path_cmd, cmd->cmd, env);
@@ -153,6 +170,5 @@ int	one_cmd(t_cmd *cmd, char **env, char *infile, char *outfile)
 		execve(cmd->cmd[0], cmd->cmd, env);
 	if (paths)
 		free_strs(paths);
-	perror("Error: Command not found");
 	exit(EXIT_FAILURE);
 }
