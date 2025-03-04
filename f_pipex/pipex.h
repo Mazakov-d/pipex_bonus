@@ -6,7 +6,7 @@
 /*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 14:15:23 by dmazari           #+#    #+#             */
-/*   Updated: 2025/03/04 15:01:52 by dmazari          ###   ########.fr       */
+/*   Updated: 2025/03/04 16:15:23 by dmazari          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,12 @@ typedef struct s_pipe_data
 	char	*outfile;
 }	t_pipe_data;
 
+typedef struct s_cmd
+{
+	char	**cmd_a;
+	char	**cmd_b;
+}	t_cmd;
+
 char	*str_dup_c(char *str, char c_limit, char c_join);
 int		count_str_c_limit(char *str, char c_limit);
 char	**split_c(char *str, char c_limit, char c_join);
@@ -39,17 +45,18 @@ char	*ft_strcat(char *str_a, char *str_b);
 int		index_path_cmd(char *cmd, char **path);
 char	**get_path_env(char **env);
 char	*get_path_cmd(char *cmd, char **path);
-char	**cmd(char *cmd, int a, int b);
-int		cmd_a_infile(char **cmd_a, char **env, char *infile, int pipe_fd[2]);
-int		cmd_b_outfile(char **cmd_b, char **env, char *outfile, int pipe_fd[2]);
+char	**create_cmd(char *cmd, int a, int b);
+int		cmd_a_infile(t_cmd *cmd, char **env, char *infile, int pipe_fd[2]);
+int		cmd_b_outfile(t_cmd *cmd, char **env, char *outfile, int pipe_fd[2]);
 
-void	child_process_first(char **cmd, char **env, t_pipe_data data);
-void	child_process_second(char **cmd, char **env, t_pipe_data data);
+void	child_process_first(t_cmd *cmd, char **env, t_pipe_data data);
+void	child_process_second(t_cmd *cmd, char **env, t_pipe_data data);
 
 int		error_pipe(int i);
 int		error_create_cmd(int pipe_fd[2], int i);
 int		error_fork(int i, char *path_cmd, int pipe_fd[2]);
 
+void	*free_cmd(t_cmd *cmd);
 int		free_close_fd(char *str, int pipe_fd[2], int i);
 int		open_switch_stdin(char *file);
 int		open_switch_stdout(char *file);

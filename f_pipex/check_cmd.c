@@ -6,7 +6,7 @@
 /*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 19:41:59 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/03/04 14:45:24 by dmazari          ###   ########.fr       */
+/*   Updated: 2025/03/04 15:53:34 by dmazari          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,20 +111,16 @@ char	*get_path_cmd(char *cmd, char **path)
 	}
 	splited_cmd = split_c(cmd, ' ', '\0');
 	if (!splited_cmd)
-	{
-		free_strs(path);
-		return (NULL);
-	}
+		return (free_strs(path));
 	i = index_path_cmd(cmd, path);
 	if (i == -1)
 	{
-		free_strs(path);
 		free_strs(splited_cmd);
-		fprintf(stderr, "Command not found: %s\n", cmd);
+		free_strs(path);
 		return (NULL);
 	}
 	path_cmd = ft_strcat(path[i], splited_cmd[0]);
-	free_strs(path);
 	free_strs(splited_cmd);
+	free_strs(path);
 	return (path_cmd);
 }

@@ -6,34 +6,40 @@
 /*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 18:49:46 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/03/04 14:45:38 by dmazari          ###   ########.fr       */
+/*   Updated: 2025/03/04 16:17:28 by dmazari          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
+void	cleanup_resources(char **cmd_a, char **cmd_b)
+{
+	if (cmd_a)
+		free_strs(cmd_a);
+	if (cmd_b)
+		free_strs(cmd_b);
+}
+
 int	pipex(char	**av, char	**env)
 {
-	char	**cmd_a;
-	char	**cmd_b;
+	t_cmd	cmd;
 	int		pipe_fd[2];
 	int		status;
 
 	if (pipe(pipe_fd) < 0)
 		return (error_pipe(1));
-	cmd_a = cmd(av[1], ' ', 0);
-	if (!cmd_a)
+	cmd.cmd_a = create_cmd(av[1], ' ', 0);
+	if (!cmd.cmd_a)
 		return (error_create_cmd(pipe_fd, 1));
-	cmd_b = cmd(av[2], ' ', 0);
-	if (!cmd_b)
+	cmd.cmd_b = create_cmd(av[2], ' ', 0);
+	if (!cmd.cmd_b)
 	{
-		free_strs(cmd_a);
+		free_strs(cmd.cmd_a);
 		return (error_create_cmd(pipe_fd, 1));
 	}
-	cmd_a_infile(cmd_a, env, av[0], pipe_fd);
-	status = cmd_b_outfile(cmd_b, env, av[3], pipe_fd);
-	free_strs(cmd_a);
-	free_strs(cmd_b);
+	cmd_a_infile(&cmd, env, av[0], pipe_fd);
+	status = cmd_b_outfile(&cmd, env, av[3], pipe_fd);
+	free_cmd(&cmd);
 	return (status);
 }
 

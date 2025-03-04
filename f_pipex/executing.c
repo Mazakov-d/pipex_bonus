@@ -6,13 +6,13 @@
 /*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 14:06:35 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/03/04 15:02:09 by dmazari          ###   ########.fr       */
+/*   Updated: 2025/03/04 16:12:35 by dmazari          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-char	**cmd(char *c, int a, int b)
+char	**create_cmd(char *c, int a, int b)
 {
 	char	**cmd;
 
@@ -52,7 +52,7 @@ int	open_switch_stdout(char *file)
 	return (0);
 }
 
-int	cmd_a_infile(char **cmd_a, char **env, char *infile, int pipe_fd[2])
+int	cmd_a_infile(t_cmd *cmd, char **env, char *infile, int pipe_fd[2])
 {
 	int			pid;
 	t_pipe_data	data;
@@ -65,17 +65,16 @@ int	cmd_a_infile(char **cmd_a, char **env, char *infile, int pipe_fd[2])
 		data.pipe_fd[0] = pipe_fd[0];
 		data.pipe_fd[1] = pipe_fd[1];
 		data.infile = infile;
-		child_process_first(cmd_a, env, data);
+		child_process_first(cmd, env, data);
 	}
 	close(pipe_fd[1]);
 	return (0);
 }
 
-int	cmd_b_outfile(char **cmd_b, char **env, char *outfile, int pipe_fd[2])
+int	cmd_b_outfile(t_cmd *cmd, char **env, char *outfile, int pipe_fd[2])
 {
 	int			pid;
-	int			status1;
-	int			status2;
+	int			status;
 	t_pipe_data	data;
 
 	pid = fork();
@@ -86,58 +85,10 @@ int	cmd_b_outfile(char **cmd_b, char **env, char *outfile, int pipe_fd[2])
 		data.pipe_fd[0] = pipe_fd[0];
 		data.pipe_fd[1] = pipe_fd[1];
 		data.outfile = outfile;
-		child_process_second(cmd_b, env, data);
+		child_process_second(cmd, env, data);
 	}
 	close(pipe_fd[0]);
-	waitpid(-1, &status1, 0);
-	waitpid(-1, &status2, 0);
-	return (0);
-}
-
-int	execute_cmd_b(char **cmd_b, char **env, char *path_cmd, int pipe_fd[2])
-{
-	if (open_switch_stdout(outfile) == 1)
-	{
-		close(pipe_fd[0]);
-		if (path_cmd)
-			free(path_cmd);
-		exit(EXIT_FAILURE);
-	}
-	dup2(pipe_fd[0], STDIN_FILENO);
-	close(pipe_fd[0]);
-	if (path_cmd)
-		execve(path_cmd, cmd_b, env);
-	perror("Error: Command not found");
-	if (path_cmd)
-		free(path_cmd);
-	exit(EXIT_FAILURE);
-	return (0);
-}
-
-int	cmd_b_outfile(char **cmd_b, char **env, char *outfile, int pipe_fd[2])
-{
-	int		pid;
-	int		status1;
-	int		status2;
-	char	*path_cmd;
-
-	path_cmd = get_path_cmd(cmd_b[0], get_path_env(env));
-	pid = fork();
-	if (pid < 0)
-	{
-		if (path_cmd)
-			free(path_cmd);
-		return (error_fork(1, NULL, pipe_fd));
-	}
-	if (pid == 0)
-	{
-		close(pipe_fd[1]);
-		execute_cmd_b(cmd_b, env, path_cmd, pipe_fd);
-	}
-	if (path_cmd)
-		free(path_cmd);
-	close(pipe_fd[0]);
-	waitpid(-1, &status1, 0);
-	waitpid(-1, &status2, 0);
+	waitpid(pid, &status, 0);
+	waitpid(-1, NULL, 0);
 	return (0);
 }

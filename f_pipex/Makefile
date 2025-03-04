@@ -1,7 +1,7 @@
 NAME = ../pipex
 
 CC = cc
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -g
 
 SRCS = check_cmd.c		\
 		executing.c		\
@@ -18,7 +18,7 @@ HEADER = pipex.h
 all: $(NAME) 
 
 $(NAME): $(OBJS) Makefile
-	$(CC) $(OBJS) -o $(NAME)
+	$(CC) $(OBJS) -o $(NAME) -g3
 
 %.o: %.c $(HEADER)
 	$(CC) $(CFLAGS) -c $< -o $@
