@@ -6,11 +6,12 @@
 /*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 18:49:46 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/03/04 16:17:28 by dmazari          ###   ########.fr       */
+/*   Updated: 2025/03/04 17:46:47 by dmazari          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+#include <stdio.h>      
 
 void	cleanup_resources(char **cmd_a, char **cmd_b)
 {
@@ -40,6 +41,7 @@ int	pipex(char	**av, char	**env)
 	cmd_a_infile(&cmd, env, av[0], pipe_fd);
 	status = cmd_b_outfile(&cmd, env, av[3], pipe_fd);
 	free_cmd(&cmd);
+	printf("%d\n", status);
 	return (status);
 }
 
@@ -56,7 +58,5 @@ int	main(int ac, char **av, char **env)
 		write(2, "Error: No environment\n", 23);
 		return (1);
 	}
-	if (pipex(av + 1, env) == 1)
-		return (1);
-	return (0);
+	return (pipex(av + 1, env));
 }

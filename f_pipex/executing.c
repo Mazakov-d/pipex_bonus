@@ -6,7 +6,7 @@
 /*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 14:06:35 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/03/04 16:12:35 by dmazari          ###   ########.fr       */
+/*   Updated: 2025/03/04 17:45:16 by dmazari          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,5 +90,7 @@ int	cmd_b_outfile(t_cmd *cmd, char **env, char *outfile, int pipe_fd[2])
 	close(pipe_fd[0]);
 	waitpid(pid, &status, 0);
 	waitpid(-1, NULL, 0);
-	return (0);
+	if (WIFEXITED(status))
+		status = WEXITSTATUS(status);
+	return (status);
 }
