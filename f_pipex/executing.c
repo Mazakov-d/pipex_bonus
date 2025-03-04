@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executing.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 14:06:35 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/02/26 15:22:41 by dmazari          ###   ########.fr       */
+/*   Updated: 2025/03/03 20:35:09 by dorianmazar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,12 @@ int	cmd_a_infile(char **cmd_a, char **env, char *infile, int pipe_fd[2])
 
 	path_cmd = get_path_cmd(cmd_a[0], get_path_env(env));
 	if (!path_cmd)
-		return (free_close_fd(NULL, pipe_fd, 1));
+		return (1);
 	if (open_switch_stdin(infile) == 1)
-		return (free_close_fd(path_cmd, pipe_fd, 1));
+		return (free_close_fd(path_cmd, NULL, 1));
 	pid = fork();
 	if (pid < 0)
-		return (error_fork(1, path_cmd, pipe_fd));
+		return (error_fork(1, path_cmd, NULL));
 	if (pid == 0)
 	{
 		close(pipe_fd[0]);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 14:15:23 by dmazari           #+#    #+#             */
-/*   Updated: 2025/02/26 15:01:35 by dmazari          ###   ########.fr       */
+/*   Updated: 2025/03/03 20:17:31 by dorianmazar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int		cmd_a_infile(char **cmd_a, char **env, char *infile, int pipe_fd[2]);
 int		cmd_b_outfile(char **cmd_b, char **env, char *outfile, int pipe_fd[2]);
 
 int		error_pipe(int i);
-int		error_create_cmd(int i);
+int		error_create_cmd(int pipe_fd[2], int i);
 int		error_fork(int i, char *path_cmd, int pipe_fd[2]);
 
 int		free_close_fd(char *str, int pipe_fd[2], int i);
