@@ -8,6 +8,7 @@ SRCS = check_cmd.c		\
 		get_path.c		\
 		free_functions.c\
 		str_error.c		\
+		child_process.c \
 		main.c			\
 
 OBJS = $(SRCS:.c=.o)

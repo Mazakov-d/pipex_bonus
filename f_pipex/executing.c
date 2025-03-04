@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executing.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
+/*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 14:06:35 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/03/03 20:35:09 by dorianmazar      ###   ########.fr       */
+/*   Updated: 2025/03/04 15:02:09 by dmazari          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	open_switch_stdin(char *file)
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
 	{
-		write(2, "Error : can't read infile\n", 27);
+		perror("Error: Cannot open infile");
 		return (1);
 	}
 	dup2(fd, STDIN_FILENO);
@@ -41,9 +41,12 @@ int	open_switch_stdout(char *file)
 {
 	int	fd;
 
-	fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
+	{
+		perror("Error: Cannot open outfile");
 		return (1);
+	}
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
 	return (0);
@@ -51,58 +54,90 @@ int	open_switch_stdout(char *file)
 
 int	cmd_a_infile(char **cmd_a, char **env, char *infile, int pipe_fd[2])
 {
-	int		pid;
-	char	*path_cmd;
+	int			pid;
+	t_pipe_data	data;
 
-	path_cmd = get_path_cmd(cmd_a[0], get_path_env(env));
-	if (!path_cmd)
-		return (1);
-	if (open_switch_stdin(infile) == 1)
-		return (free_close_fd(path_cmd, NULL, 1));
 	pid = fork();
 	if (pid < 0)
-		return (error_fork(1, path_cmd, NULL));
+		return (error_fork(1, NULL, pipe_fd));
 	if (pid == 0)
 	{
-		close(pipe_fd[0]);
-		dup2(pipe_fd[1], STDOUT_FILENO);
-		close(pipe_fd[1]);
-		execve(path_cmd, cmd_a, env);
-		free(path_cmd);
-		perror("execve");
-		exit(EXIT_FAILURE);
+		data.pipe_fd[0] = pipe_fd[0];
+		data.pipe_fd[1] = pipe_fd[1];
+		data.infile = infile;
+		child_process_first(cmd_a, env, data);
 	}
 	close(pipe_fd[1]);
-	waitpid(pid, NULL, 0);
-	free(path_cmd);
+	return (0);
+}
+
+int	cmd_b_outfile(char **cmd_b, char **env, char *outfile, int pipe_fd[2])
+{
+	int			pid;
+	int			status1;
+	int			status2;
+	t_pipe_data	data;
+
+	pid = fork();
+	if (pid < 0)
+		return (error_fork(1, NULL, pipe_fd));
+	if (pid == 0)
+	{
+		data.pipe_fd[0] = pipe_fd[0];
+		data.pipe_fd[1] = pipe_fd[1];
+		data.outfile = outfile;
+		child_process_second(cmd_b, env, data);
+	}
+	close(pipe_fd[0]);
+	waitpid(-1, &status1, 0);
+	waitpid(-1, &status2, 0);
+	return (0);
+}
+
+int	execute_cmd_b(char **cmd_b, char **env, char *path_cmd, int pipe_fd[2])
+{
+	if (open_switch_stdout(outfile) == 1)
+	{
+		close(pipe_fd[0]);
+		if (path_cmd)
+			free(path_cmd);
+		exit(EXIT_FAILURE);
+	}
+	dup2(pipe_fd[0], STDIN_FILENO);
+	close(pipe_fd[0]);
+	if (path_cmd)
+		execve(path_cmd, cmd_b, env);
+	perror("Error: Command not found");
+	if (path_cmd)
+		free(path_cmd);
+	exit(EXIT_FAILURE);
 	return (0);
 }
 
 int	cmd_b_outfile(char **cmd_b, char **env, char *outfile, int pipe_fd[2])
 {
 	int		pid;
+	int		status1;
+	int		status2;
 	char	*path_cmd;
 
 	path_cmd = get_path_cmd(cmd_b[0], get_path_env(env));
-	if (!path_cmd)
-		return (free_close_fd(NULL, pipe_fd, 1));
-	if (open_switch_stdout(outfile) == 1)
-		return (free_close_fd(path_cmd, pipe_fd, 1));
 	pid = fork();
 	if (pid < 0)
-		return (error_fork(1, path_cmd, pipe_fd));
+	{
+		if (path_cmd)
+			free(path_cmd);
+		return (error_fork(1, NULL, pipe_fd));
+	}
 	if (pid == 0)
 	{
 		close(pipe_fd[1]);
-		dup2(pipe_fd[0], STDIN_FILENO);
-		close(pipe_fd[0]);
-		execve(path_cmd, cmd_b, env);
-		free(path_cmd);
-		perror("execve");
-		exit(EXIT_FAILURE);
+		execute_cmd_b(cmd_b, env, path_cmd, pipe_fd);
 	}
+	if (path_cmd)
+		free(path_cmd);
 	close(pipe_fd[0]);
-	waitpid(pid, NULL, 0);
-	free(path_cmd);
+	waitpid(-1, &status1, 0);
+	waitpid(-1, &status2, 0);
 	return (0);
 }

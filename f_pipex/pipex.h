@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
+/*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 14:15:23 by dmazari           #+#    #+#             */
-/*   Updated: 2025/03/03 20:17:31 by dorianmazar      ###   ########.fr       */
+/*   Updated: 2025/03/04 15:01:52 by dmazari          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,15 @@
 # include <stdlib.h>
 # include <fcntl.h>
 # include <sys/wait.h>
+# include <errno.h>
+# include <string.h>
+
+typedef struct s_pipe_data
+{
+	int		pipe_fd[2];
+	char	*infile;
+	char	*outfile;
+}	t_pipe_data;
 
 char	*str_dup_c(char *str, char c_limit, char c_join);
 int		count_str_c_limit(char *str, char c_limit);
@@ -34,10 +43,15 @@ char	**cmd(char *cmd, int a, int b);
 int		cmd_a_infile(char **cmd_a, char **env, char *infile, int pipe_fd[2]);
 int		cmd_b_outfile(char **cmd_b, char **env, char *outfile, int pipe_fd[2]);
 
+void	child_process_first(char **cmd, char **env, t_pipe_data data);
+void	child_process_second(char **cmd, char **env, t_pipe_data data);
+
 int		error_pipe(int i);
 int		error_create_cmd(int pipe_fd[2], int i);
 int		error_fork(int i, char *path_cmd, int pipe_fd[2]);
 
 int		free_close_fd(char *str, int pipe_fd[2], int i);
+int		open_switch_stdin(char *file);
+int		open_switch_stdout(char *file);
 
 #endif

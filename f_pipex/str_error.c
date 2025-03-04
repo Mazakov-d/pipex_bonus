@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   str_error.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
+/*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:03:54 by dmazari           #+#    #+#             */
-/*   Updated: 2025/03/03 20:34:38 by dorianmazar      ###   ########.fr       */
+/*   Updated: 2025/03/04 14:49:24 by dmazari          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,20 @@
 
 int	error_pipe(int i)
 {
-	write(2, "Error : creating pipe\n", 23);
+	write(2, "Error: Creating pipe\n", 21);
 	return (i);
 }
 
 int	error_create_cmd(int pipe_fd[2], int i)
 {
-	if (pipe_fd)
-	{
-		close(pipe_fd[1]);
-		close(pipe_fd[0]);
-	}
-	write(2, "Error : creating command strings\n", 34);
+	close(pipe_fd[0]);
+	close(pipe_fd[1]);
+	write(2, "Error: Creating command strings\n", 32);
 	return (i);
 }
 
 int	error_fork(int i, char *path_cmd, int pipe_fd[2])
 {
-	write(2, "Error : creating child pid\n", 28);
+	write(2, "Error: Creating child process\n", 30);
 	return (free_close_fd(path_cmd, pipe_fd, i));
 }

@@ -6,7 +6,7 @@
 /*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 13:55:29 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/02/26 15:05:05 by dmazari          ###   ########.fr       */
+/*   Updated: 2025/03/04 14:41:45 by dmazari          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ int	count_str_c_limit(char *str, char c_limit)
 	int	i;
 	int	count;
 
+	if (!str)
+		return (0);
 	i = 0;
 	count = 1;
 	while (str[i])
@@ -70,8 +72,12 @@ char	**split_c(char	*str, char c_limit, char c_join)
 {
 	char	**strs;
 	int		i;
+	int		str_count;
 
-	strs = malloc(sizeof(char *) * count_str_c_limit(str, c_limit) * 2);
+	if (!str)
+		return (NULL);
+	str_count = count_str_c_limit(str, c_limit);
+	strs = malloc(sizeof(char *) * (str_count + 1));
 	if (!strs)
 		return (NULL);
 	i = 0;
@@ -98,7 +104,7 @@ char	**get_path_env(char **env)
 	i = find_path_string(env);
 	if (i == -1)
 	{
-		write(2, "Error : didn't find the PATH in env\n", 37);
+		write(2, "Error: PATH not found in environment\n", 37);
 		return (NULL);
 	}
 	path = split_c(env[i] + 5, ':', '/');
