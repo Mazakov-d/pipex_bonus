@@ -6,7 +6,7 @@
 /*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 13:25:03 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/03/04 16:45:36 by dmazari          ###   ########.fr       */
+/*   Updated: 2025/03/07 17:40:33 by dmazari          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,9 @@ int	open_switch_stdin(char *file)
 	if (fd < 0)
 	{
 		perror("Error: Cannot open infile");
-		return (1);
+		fd = open("/dev/null", O_RDONLY);
+		if (fd < 0)
+			return (1);
 	}
 	dup2(fd, STDIN_FILENO);
 	close(fd);
@@ -44,10 +46,14 @@ int	open_switch_stdout(char *file)
 
 int	open_switch_in_out(char *infile, char *outfile)
 {
-	if (open_switch_stdin(infile) == 1)
+	int infile_status;
+	int outfile_status;
+
+	infile_status = open_switch_stdin(infile);
+	outfile_status = open_switch_stdout(outfile);
+	if (infile_status == 1 && outfile_status == 1)
 		return (1);
-	if (open_switch_stdout(outfile) == 1)
-		return (1);
+		
 	return (0);
 }
 
