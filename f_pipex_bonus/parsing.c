@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:04:37 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/03/07 17:20:20 by dmazari          ###   ########.fr       */
+/*   Updated: 2025/03/07 20:50:32 by dorianmazar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,11 @@ char	**command_flags(char **args, int *i, int j, int k)
 	return (cmd);
 }
 
-t_cmd	*new_cmd(t_cmd *actu, int i)
+t_data	*new_cmd(t_data *actu, int i)
 {
-	t_cmd	*next;
+	t_data	*next;
 
-	next = malloc(sizeof(t_cmd));
+	next = malloc(sizeof(t_data));
 	if (!next)
 		return (NULL);
 	if (i == 0)
@@ -77,16 +77,16 @@ t_cmd	*new_cmd(t_cmd *actu, int i)
 	return (next);
 }
 
-t_cmd	*get_commands(char **args)
+t_data	*get_commands(char **args)
 {
-	t_cmd	*cmd;
-	t_cmd	*save;
+	t_data	*cmd;
+	t_data	*save;
 	int		i;
 	int		j;
 
 	if (!args || !args[0])
 		return (NULL);
-	cmd = malloc(sizeof(t_cmd));
+	cmd = malloc(sizeof(t_data));
 	if (!cmd)
 		return (NULL);
 	save = cmd;

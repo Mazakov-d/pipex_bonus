@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   switch_fd.c                                        :+:      :+:    :+:   */
+/*   fd_managements.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/14 13:25:03 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/03/07 17:40:33 by dmazari          ###   ########.fr       */
+/*   Created: 2025/03/07 20:48:27 by dorianmazar       #+#    #+#             */
+/*   Updated: 2025/03/07 21:12:03 by dorianmazar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,4 +61,29 @@ void	switch_fd_in_out(int fd_a, int fd_b)
 {
 	dup2(fd_a, STDIN_FILENO);
 	dup2(fd_b, STDOUT_FILENO);
+}
+
+int	open_in_out(t_data *data, char **args, int ac)
+{
+	int		fd;
+	char	*infile;
+
+	if (is_here_doc(args[1]))
+		infile = ".temp_here_doc.txt";
+	else
+		infile = args[1];
+	fd = open(infile, O_RDONLY);
+	if (fd < 0)
+		write(2, "Error : Can't read infile\n", 27);
+	else
+		data->fd_in = fd;
+	fd = open(args[ac - 1], O_CREAT || O_TRUNC || O_WRONLY, 0644);
+	if (fd < 0)
+	{
+		write(2, "Error : Can't open outfile\n", 28);
+		return (1);
+	}
+	else
+		data->fd_out = fd;
+	return (0);
 }

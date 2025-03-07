@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executing.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 14:06:35 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/03/04 17:45:16 by dmazari          ###   ########.fr       */
+/*   Updated: 2025/03/07 20:51:49 by dorianmazar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	open_switch_stdout(char *file)
 	return (0);
 }
 
-int	cmd_a_infile(t_cmd *cmd, char **env, char *infile, int pipe_fd[2])
+int	cmd_a_infile(t_data *cmd, char **env, char *infile, int pipe_fd[2])
 {
 	int			pid;
 	t_pipe_data	data;
@@ -71,7 +71,7 @@ int	cmd_a_infile(t_cmd *cmd, char **env, char *infile, int pipe_fd[2])
 	return (0);
 }
 
-int	cmd_b_outfile(t_cmd *cmd, char **env, char *outfile, int pipe_fd[2])
+int	cmd_b_outfile(t_data *cmd, char **env, char *outfile, int pipe_fd[2])
 {
 	int			pid;
 	int			status;

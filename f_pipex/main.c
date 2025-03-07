@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 18:49:46 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/03/04 17:46:47 by dmazari          ###   ########.fr       */
+/*   Updated: 2025/03/07 20:51:49 by dorianmazar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	cleanup_resources(char **cmd_a, char **cmd_b)
 
 int	pipex(char	**av, char	**env)
 {
-	t_cmd	cmd;
+	t_data	cmd;
 	int		pipe_fd[2];
 	int		status;
 

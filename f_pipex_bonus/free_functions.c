@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_functions.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 22:56:32 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/03/04 16:46:36 by dmazari          ###   ########.fr       */
+/*   Updated: 2025/03/07 21:13:49 by dorianmazar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,31 +29,31 @@ void	*free_strs(char **strs)
 	return (NULL);
 }
 
-void	*free_cmd(t_cmd *cmd)
+void	*free_data(t_data *data)
 {
-	t_cmd	*save;
-	t_cmd	*head;
+	t_data	*save;
+	t_data	*head;
 
-	if (!cmd)
+	if (!data)
 		return (NULL);
-	head = cmd;
+	head = data;
 	while (head && head->prev)
 		head = head->prev;
-	cmd = head;
-	while (cmd)
+	data = head;
+	while (data)
 	{
-		save = cmd->next;
-		if (cmd->cmd)
-			free_strs(cmd->cmd);
-		free(cmd);
-		cmd = save;
+		save = data->next;
+		if (data->cmd)
+			free_strs(data->cmd);
+		free(data);
+		data = save;
 	}
 	return (NULL);
 }
 
-int	free_cmd_int(t_cmd *cmd)
+int	free_data_int(t_data *data)
 {
-	free_cmd(cmd);
+	free_data(data);
 	return (1);
 }
 
@@ -66,15 +66,21 @@ int	free_ptr(void *ptr, int i, char *error)
 	return (i);
 }
 
-int	free_cmd_fd(t_cmd *cmd, int pipe_fd[2], int i, char *error)
+int	free_data_fd(t_data *data, int i, char *error)
 {
+	int	i;
+
+	i = 0;
 	if (error)
 		write(2, error, ft_strlen(error));
-	if (pipe_fd)
+	while (data->pipe_fd[i])
 	{
-		close(pipe_fd[0]);
-		close(pipe_fd[1]);
+		close(data->pipe_fd[i][0]);
+		close(data->pipe_fd[i][1]);
+		i++;
 	}
-	free_cmd(cmd);
+	close(data->fd_in);
+	close(data->fd_out);
+	free_data(data);
 	return (i);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:07:40 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/03/04 17:54:22 by dmazari          ###   ########.fr       */
+/*   Updated: 2025/03/07 20:51:49 by dorianmazar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ char	*ft_strcat(char *str, char *s)
 	return (cat);
 }
 
-int	count_cmd(char **args)
+int	count_data(char **args)
 {
 	int	i;
 	int	count;
@@ -68,7 +68,7 @@ int	count_cmd(char **args)
 	return (count);
 }
 
-int	last_cmd(t_cmd *cmd)
+int	last_data(t_data *cmd)
 {
 	int	i;
 

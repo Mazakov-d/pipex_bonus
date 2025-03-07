@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_functions.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 14:09:29 by dmazari           #+#    #+#             */
-/*   Updated: 2025/03/04 16:15:02 by dmazari          ###   ########.fr       */
+/*   Updated: 2025/03/07 20:51:49 by dorianmazar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	free_close_fd(char *str, int pipe_fd[2], int i)
 	return (i);
 }
 
-void	*free_cmd(t_cmd *cmd)
+void	*free_cmd(t_data *cmd)
 {
 	free_strs(cmd->cmd_a);
 	free_strs(cmd->cmd_b);

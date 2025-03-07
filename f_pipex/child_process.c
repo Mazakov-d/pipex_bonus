@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   child_process.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:30:20 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/03/04 16:23:24 by dmazari          ###   ########.fr       */
+/*   Updated: 2025/03/07 20:51:49 by dorianmazar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	child_process_first(t_cmd *cmd, char **env, t_pipe_data data)
+void	child_process_first(t_data *cmd, char **env, t_pipe_data data)
 {
 	char	*path_cmd;
 
@@ -38,7 +38,7 @@ void	child_process_first(t_cmd *cmd, char **env, t_pipe_data data)
 	exit(EXIT_FAILURE);
 }
 
-void	child_process_second(t_cmd *cmd, char **env, t_pipe_data data)
+void	child_process_second(t_data *cmd, char **env, t_pipe_data data)
 {
 	char	*path_cmd;
 

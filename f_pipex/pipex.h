@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 14:15:23 by dmazari           #+#    #+#             */
-/*   Updated: 2025/03/04 18:03:26 by dmazari          ###   ########.fr       */
+/*   Updated: 2025/03/07 20:51:49 by dorianmazar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ typedef struct s_cmd
 {
 	char	**cmd_a;
 	char	**cmd_b;
-}	t_cmd;
+}	t_data;
 
 /*
  * get_path.c
@@ -61,14 +61,14 @@ char	*get_path_cmd(char *cmd, char **path);
 char	**create_cmd(char *cmd, int a, int b);
 int		open_switch_stdin(char *file);
 int		open_switch_stdout(char *file);
-int		cmd_a_infile(t_cmd *cmd, char **env, char *infile, int pipe_fd[2]);
-int		cmd_b_outfile(t_cmd *cmd, char **env, char *outfile, int pipe_fd[2]);
+int		cmd_a_infile(t_data *cmd, char **env, char *infile, int pipe_fd[2]);
+int		cmd_b_outfile(t_data *cmd, char **env, char *outfile, int pipe_fd[2]);
 
 /*
  * child_process.c
  */
-void	child_process_first(t_cmd *cmd, char **env, t_pipe_data data);
-void	child_process_second(t_cmd *cmd, char **env, t_pipe_data data);
+void	child_process_first(t_data *cmd, char **env, t_pipe_data data);
+void	child_process_second(t_data *cmd, char **env, t_pipe_data data);
 
 /*
  * str_error.c
@@ -80,7 +80,7 @@ int		error_fork(int i, char *path_cmd, int pipe_fd[2]);
 /*
  * free_functions.c
  */
-void	*free_cmd(t_cmd *cmd);
+void	*free_cmd(t_data *cmd);
 int		free_close_fd(char *str, int pipe_fd[2], int i);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 13:02:19 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/03/07 17:16:56 by dmazari          ###   ########.fr       */
+/*   Updated: 2025/03/07 20:46:26 by dorianmazar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	here_doc(char **args)
 		if (!line)
 		{
 			close(fd);
-			return (-1);
+			return (here_doc_error(-1));
 		}
 		if (is_limiter(line, args[1]) == 0)
 			break ;
