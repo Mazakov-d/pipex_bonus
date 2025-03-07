@@ -6,7 +6,7 @@
 /*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 22:56:32 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/03/07 21:13:49 by dorianmazar      ###   ########.fr       */
+/*   Updated: 2025/03/07 21:34:46 by dorianmazar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,16 +68,16 @@ int	free_ptr(void *ptr, int i, char *error)
 
 int	free_data_fd(t_data *data, int i, char *error)
 {
-	int	i;
+	int	j;
 
-	i = 0;
+	j = 0;
 	if (error)
 		write(2, error, ft_strlen(error));
-	while (data->pipe_fd[i])
+	while (data->pipe_fd[j])
 	{
 		close(data->pipe_fd[i][0]);
 		close(data->pipe_fd[i][1]);
-		i++;
+		j++;
 	}
 	close(data->fd_in);
 	close(data->fd_out);

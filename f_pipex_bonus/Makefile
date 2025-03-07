@@ -9,7 +9,7 @@ SRC = main.c					\
 		free_functions.c		\
 		executing.c				\
 		parsing.c				\
-		switch_fd.c				\
+		fd_managements.c			\
 		utils.c					\
 		here_doc.c				\
 		get_next_line.c			\

@@ -6,7 +6,7 @@
 /*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:02:18 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/03/07 20:51:49 by dorianmazar      ###   ########.fr       */
+/*   Updated: 2025/03/07 21:18:40 by dorianmazar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,17 +34,16 @@ typedef struct s_data
 
 /***free_functions.c*/
 void	*free_strs(char **strs);
-void	*free_cmd(t_data *cmd);
-int		free_cmd_int(t_data *cmd);
+void	*free_data(t_data *data);
+int		free_data_int(t_data *data);
 int		free_ptr(void *ptr, int i, char *error);
-int		free_cmd_fd(t_data *cmd, int pipe_fd[2], int i, char *error);
+int		free_data_fd(t_data *data, int i, char *error);
 
 /**utils.c*/
 int		ft_strclen(char *str, int c);
 char	*ft_strcat(char *str, char *s);
 int		count_data(char **args);
 int		last_data(t_data *cmd);
-char	*ft_strdup(char *str);
 
 /**path.c*/
 char	*str_dup_c(char *str, char c_limit, char c_join);
@@ -57,38 +56,26 @@ char	**get_path_env(char **env);
 int		is_flag(char *str);
 int		count_flags(char **args, int i);
 char	**command_flags(char **args, int *i, int j, int k);
+t_data	*new_cmd(t_data *actu, int i);
 t_data	*get_commands(char **args);
 
-/**switch_fd.c*/
-int		open_switch_stdin(char *file);
-int		open_switch_stdout(char *file);
-int		open_switch_in_out(char *infile, char *outfile);
+/**fd_managements.c*/
 void	switch_fd_in_out(int fd_a, int fd_b);
-
-/**executing.c*/
-void	child_process_first(char **cmd_a, char **env, 
-			char *infile, int pipe_fd[2]);
-void	child_process_last(char **cmd_b, char **env, 
-			char *outfile, int pipe_fd[2]);
-void	child_process_pipe(char **cmd, char **env, int prev[2], int next[2]);
-int		cmd_infile(char **cmd_a, char **env, char *infile, int pipe_fd[2]);
-int		cmd_outfile(char **cmd_b, char **env, char *outfile, int pipe_fd[2]);
-int		cmd_to_pipe(char **cmd, char **env, int prev_pipe[2], int next_pipe[2]);
-int		one_cmd(t_data *cmd, char **env, char *infile, char *outfile);
+int		open_in_out(t_data *data, char **args, int ac);
 
 /**cmd_path.c*/
+int		count_flags(char **args, int i);
 int		index_path_cmd(char *cmd, char **path);
 char	*get_path_cmd(char *cmd, char **path);
 
 /**here_doc.c */
+int		here_doc_error(int i);
 int		is_here_doc(char *str);
 int		is_limiter(char *str, char *limiter);
 int		here_doc(char **args);
 
 /**main.c*/
+int		pipex(char **args, char **env, int ac);
 
-
-/**str_error.c */
-void	*error_malloc(void);
 
 #endif

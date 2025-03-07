@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 13:29:16 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/03/04 16:44:18 by dmazari          ###   ########.fr       */
+/*   Updated: 2025/03/07 21:34:16 by dorianmazar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ char	*get_path_cmd(char *cmd, char **path)
 	if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/'))
 	{
 		if (access(cmd, F_OK | X_OK) == 0)
-			return (ft_strdup(cmd));
+			return (ft_strndup(cmd, ft_strlen(cmd)));
 		return (NULL);
 	}
 	splited_cmd = split_c(cmd, ' ', '\0');

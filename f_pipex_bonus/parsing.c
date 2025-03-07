@@ -6,7 +6,7 @@
 /*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:04:37 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/03/07 20:50:32 by dorianmazar      ###   ########.fr       */
+/*   Updated: 2025/03/07 21:35:12 by dorianmazar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,10 +96,10 @@ t_data	*get_commands(char **args)
 	{
 		cmd->cmd = command_flags(args, &i, 0, 0);
 		if (!cmd->cmd)
-			return (free_cmd(save));
+			return (free_data(save));
 		cmd = new_cmd(cmd, j);
 		if (!cmd)
-			return (free_cmd(save));
+			return (free_data(save));
 		j++;
 	}
 	cmd->next = NULL;

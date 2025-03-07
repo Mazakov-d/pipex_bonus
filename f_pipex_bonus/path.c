@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:40:34 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/03/04 17:54:05 by dmazari          ###   ########.fr       */
+/*   Updated: 2025/03/07 21:33:50 by dorianmazar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ char	**split_c(char	*str, char c_limit, char c_join)
 	str_count = count_str_c_limit(str, c_limit);
 	strs = malloc(sizeof(char *) * (str_count + 1));
 	if (!strs)
-		return (error_malloc());
+		return (NULL);
 	i = 0;
 	while (*str)
 	{
