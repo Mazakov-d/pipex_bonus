@@ -4,17 +4,15 @@ CC = cc
 CFLAGS = -Wall -Werror -Wextra
 
 SRC = main.c					\
-		path.c					\
-		cmd_path.c				\
-		free_functions.c		\
-		executing.c				\
-		parsing.c				\
-		fd_managements.c			\
-		utils.c					\
+		path_utils.c			\
+		cmd_execution.c			\
+		cmd_parsing.c			\
+		memory_management.c		\
+		fd_management.c			\
+		utils_and_errors.c		\
 		here_doc.c				\
 		get_next_line.c			\
 		get_next_line_utils.c	\
-		str_error.c				\
 
 HEADER = pipex_bonus.h	\
 		get_next_line.h	\

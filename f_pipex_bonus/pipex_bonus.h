@@ -6,7 +6,7 @@
 /*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:02:18 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/03/07 21:18:40 by dorianmazar      ###   ########.fr       */
+/*   Updated: 2025/03/07 22:49:55 by dorianmazar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,61 +21,89 @@
 # include <stdio.h>
 # include "get_next_line.h"
 
+typedef struct s_cmd
+{
+	char			**args;
+	struct s_cmd	*next;
+	struct s_cmd	*prev;
+	int				position;
+}	t_cmd;
+
+typedef struct s_fd
+{
+	int				**pipes;
+	int				in_file;
+	int				out_file;
+	int				pipe_count;
+}	t_fd;
+
 typedef struct s_data
 {
-	char			**cmd;
-	struct s_data	*next;
-	struct s_data	*prev;
-	int				place;
-	int				**pipe_fd;
-	int				fd_in;
-	int				fd_out;
+	t_cmd			*cmd_list;
+	t_fd			fd;
+	char			**env;
+	int				cmd_count;
+	int				here_doc;
 }	t_data;
 
-/***free_functions.c*/
-void	*free_strs(char **strs);
-void	*free_data(t_data *data);
-int		free_data_int(t_data *data);
-int		free_ptr(void *ptr, int i, char *error);
-int		free_data_fd(t_data *data, int i, char *error);
-
-/**utils.c*/
+/* String utils */
+int		ft_strlen(char *str);
 int		ft_strclen(char *str, int c);
 char	*ft_strcat(char *str, char *s);
-int		count_data(char **args);
-int		last_data(t_data *cmd);
+char	*ft_strndup(char *str, int n);
+char	*ft_strdup(char *str);
 
-/**path.c*/
+/* Path utils */
 char	*str_dup_c(char *str, char c_limit, char c_join);
 int		count_str_c_limit(char *str, char c_limit);
-int		find_path_string(char **env);
+int		find_path_in_env(char **env);
 char	**split_c(char *str, char c_limit, char c_join);
-char	**get_path_env(char **env);
+char	**get_path_from_env(char **env);
 
-/**parsing.c*/
+/* Command parsing */
 int		is_flag(char *str);
 int		count_flags(char **args, int i);
-char	**command_flags(char **args, int *i, int j, int k);
-t_data	*new_cmd(t_data *actu, int i);
-t_data	*get_commands(char **args);
+int		is_grep(char *str, int *k);
+char	**parse_cmd_args(char **args, int *i, int j, int k);
+t_cmd	*cmd_new(t_cmd *current, int position);
+t_cmd	*parse_commands(char **args, int cmd_count);
 
-/**fd_managements.c*/
-void	switch_fd_in_out(int fd_a, int fd_b);
-int		open_in_out(t_data *data, char **args, int ac);
+/* File descriptor management */
+int		init_pipes(t_data *data, int ac, char **av);
+int		open_input_file(t_data *data, char *filename);
+int		open_output_file(t_data *data, char *filename, int append_mode);
+int		setup_files(t_data *data, char **args, int ac);
+void	redirect_io(int fd_in, int fd_out);
 
-/**cmd_path.c*/
-int		count_flags(char **args, int i);
-int		index_path_cmd(char *cmd, char **path);
-char	*get_path_cmd(char *cmd, char **path);
+/* Command execution */
+char	*get_cmd_path(char *cmd, char **path_dirs);
+void	setup_cmd_pipes(t_data *data, t_cmd *cmd);
+void	child_process(t_data *data, t_cmd *cmd, char **path_dirs);
+int		wait_for_children(int cmd_count, pid_t *pids);
+int		run_pipeline(t_data *data);
 
-/**here_doc.c */
+/* Here_doc handling */
 int		here_doc_error(int i);
 int		is_here_doc(char *str);
 int		is_limiter(char *str, char *limiter);
-int		here_doc(char **args);
+int		setup_here_doc(char **args);
 
-/**main.c*/
+/* Memory management */
+void	*free_str_array(char **strs);
+void	*free_cmd_list(t_cmd *cmd_list);
+int		free_data_struct(t_data *data);
+int		free_ptr_with_error(void *ptr, int ret_val, char *error_msg);
+int		clean_exit(t_data *data, int ret_val, char *error_msg);
+void	close_all_pipes(int **pipes, int pipe_count);
+void	free_pipes(int **pipes, int pipe_count);
+
+/* Error handling */
+void	print_error(char *msg);
+int		error_return(char *msg, int ret_val);
+void	*error_malloc(void);
+
+/* Main functions */
+int		init_data(t_data *data, char **args, char **env, int ac);
 int		pipex(char **args, char **env, int ac);
-
 
 #endif
