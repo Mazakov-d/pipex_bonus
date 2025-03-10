@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fd_management.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
+/*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 20:48:27 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/03/07 22:47:05 by dorianmazar      ###   ########.fr       */
+/*   Updated: 2025/03/10 16:48:17 by dmazari          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int	setup_files(t_data *data, char **args, int ac)
 	char	*infile;
 	int		append_mode;
 
-	if (data->here_doc)
+	if (data->here_doc == 1)
 		infile = ".temp_here_doc.txt";
 	else
 		infile = args[1];

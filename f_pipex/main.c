@@ -3,23 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
+/*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 18:49:46 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/03/07 20:51:49 by dorianmazar      ###   ########.fr       */
+/*   Updated: 2025/03/10 17:09:44 by dmazari          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-#include <stdio.h>      
-
-void	cleanup_resources(char **cmd_a, char **cmd_b)
-{
-	if (cmd_a)
-		free_strs(cmd_a);
-	if (cmd_b)
-		free_strs(cmd_b);
-}
 
 int	pipex(char	**av, char	**env)
 {
@@ -41,7 +32,6 @@ int	pipex(char	**av, char	**env)
 	cmd_a_infile(&cmd, env, av[0], pipe_fd);
 	status = cmd_b_outfile(&cmd, env, av[3], pipe_fd);
 	free_cmd(&cmd);
-	printf("%d\n", status);
 	return (status);
 }
 

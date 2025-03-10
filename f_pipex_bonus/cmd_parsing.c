@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_parsing.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
+/*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 22:55:12 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/03/07 22:53:44 by dorianmazar      ###   ########.fr       */
+/*   Updated: 2025/03/10 16:56:22 by dmazari          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,21 +83,22 @@ char	**parse_cmd_args(char **args, int *i, int j, int k)
 	return (cmd);
 }
 
-t_cmd	*cmd_new(t_cmd *current, int position)
+t_cmd *cmd_new(t_cmd *current, int position)
 {
-	t_cmd	*next;
+    t_cmd *next;
 
-	next = malloc(sizeof(t_cmd));
-	if (!next)
-		return (NULL);
-	if (position == 0)
-		current->prev = NULL;
-	current->next = next;
-	current->position = position;
-	next->prev = current;
-	next->args = NULL;
-	next->next = NULL;
-	return (next);
+    next = malloc(sizeof(t_cmd));
+    if (!next)
+        return (NULL);
+    if (position == 0)
+        current->prev = NULL;
+    current->next = next;
+    current->position = position;
+    next->prev = current;
+    next->args = NULL;
+    next->next = NULL;
+    next->position = position + 1;
+    return (next);
 }
 
 t_cmd	*parse_commands(char **args, int cmd_count)

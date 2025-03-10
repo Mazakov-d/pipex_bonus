@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_execution.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
+/*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 23:50:12 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/03/10 16:35:31 by dorianmazar      ###   ########.fr       */
+/*   Updated: 2025/03/10 17:00:45 by dmazari          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,6 @@ int	run_pipeline(t_data *data)
 		}
 		if (pids[i] == 0)
 		{
-			printf("OK");
 			free(pids);
 			child_process(data, cmd, path_dirs);
 			exit(1);
