@@ -3,22 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   fd_management.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 20:48:27 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/03/10 16:48:17 by dmazari          ###   ########.fr       */
+/*   Updated: 2025/03/11 15:56:05 by dorianmazar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-int	init_pipes(t_data *data, int ac, char **av)
+int	init_pipes(t_data *data)
 {
 	int	i;
 	int	pipe_count;
 
-	(void)ac;
-	(void)av;
 	pipe_count = data->cmd_count - 1;
 	data->fd.pipe_count = pipe_count;
 	if (pipe_count <= 0)
@@ -58,15 +56,12 @@ int	open_input_file(t_data *data, char *filename)
 	return (0);
 }
 
-int	open_output_file(t_data *data, char *filename, int append_mode)
+int	open_output_file(t_data *data, char *filename)
 {
 	int	fd;
 	int	flags;
 
-	if (append_mode)
-		flags = O_WRONLY | O_CREAT | O_APPEND;
-	else
-		flags = O_WRONLY | O_CREAT | O_TRUNC;
+	flags = O_WRONLY | O_CREAT | O_TRUNC;
 	fd = open(filename, flags, 0644);
 	if (fd < 0)
 	{
@@ -80,9 +75,8 @@ int	open_output_file(t_data *data, char *filename, int append_mode)
 int	setup_files(t_data *data, char **args, int ac)
 {
 	char	*infile;
-	int		append_mode;
 
-	if (data->here_doc == 1)
+	if (data->here_doc)
 		infile = ".temp_here_doc.txt";
 	else
 		infile = args[1];
@@ -91,8 +85,7 @@ int	setup_files(t_data *data, char **args, int ac)
 		print_error("Error: Failed to open input file\n");
 		return (1);
 	}
-	append_mode = data->here_doc;
-	if (open_output_file(data, args[ac - 1], append_mode) != 0)
+	if (open_output_file(data, args[ac - 1]) != 0)
 	{
 		print_error("Error: Failed to open output file\n");
 		return (clean_exit(data, 1, NULL));

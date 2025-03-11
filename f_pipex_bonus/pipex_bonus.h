@@ -6,7 +6,7 @@
 /*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:02:18 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/03/07 22:49:55 by dorianmazar      ###   ########.fr       */
+/*   Updated: 2025/03/11 16:23:26 by dorianmazar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,14 +64,14 @@ char	**get_path_from_env(char **env);
 int		is_flag(char *str);
 int		count_flags(char **args, int i);
 int		is_grep(char *str, int *k);
-char	**parse_cmd_args(char **args, int *i, int j, int k);
+char	**parse_cmd_args(char **args, int *i, int j, int k, int *cmd_parsed);
 t_cmd	*cmd_new(t_cmd *current, int position);
 t_cmd	*parse_commands(char **args, int cmd_count);
 
 /* File descriptor management */
-int		init_pipes(t_data *data, int ac, char **av);
+int		init_pipes(t_data *data);
 int		open_input_file(t_data *data, char *filename);
-int		open_output_file(t_data *data, char *filename, int append_mode);
+int		open_output_file(t_data *data, char *filename);
 int		setup_files(t_data *data, char **args, int ac);
 void	redirect_io(int fd_in, int fd_out);
 

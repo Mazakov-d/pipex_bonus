@@ -6,7 +6,7 @@
 /*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 20:42:43 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/03/10 16:25:56 by dorianmazar      ###   ########.fr       */
+/*   Updated: 2025/03/11 16:24:49 by dorianmazar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,19 +30,19 @@ int	init_data(t_data *data, char **args, char **env, int ac)
 		cmd_start_idx = 3;
 	else
 		cmd_start_idx = 2;
-	cmd_end_idx = ac - 1; // Last arg is outfile
+	cmd_end_idx = ac - 1;
 	data->cmd_list = parse_commands(args + cmd_start_idx, cmd_end_idx - cmd_start_idx);
 	if (!data->cmd_list)
 		return (error_return("Error: Failed to parse commands", 1));
 	cmd = data->cmd_list;
-	while (cmd)
+	while (cmd) 
 	{
 		data->cmd_count++;
 		cmd = cmd->next;
 	}
 	if (setup_files(data, args, ac) != 0)
 		return (clean_exit(data, 1, NULL));
-	if (init_pipes(data, ac, args) != 0)
+	if (init_pipes(data) != 0)
 		return (clean_exit(data, 1, NULL));
 	return (0);
 }
@@ -53,6 +53,7 @@ int	pipex(char **args, char **env, int ac)
 
 	if (init_data(&data, args, env, ac) != 0)
 		return (1);
+	print_data_debug(&data);
 	if (run_pipeline(&data) != 0)
 		return (clean_exit(&data, 1, NULL));
 	return (clean_exit(&data, 0, NULL));

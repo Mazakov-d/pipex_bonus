@@ -6,7 +6,7 @@
 /*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 23:20:12 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/03/07 22:41:25 by dorianmazar      ###   ########.fr       */
+/*   Updated: 2025/03/11 15:46:52 by dorianmazar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	free_pipes(int **pipes, int pipe_count)
 	free(pipes);
 }
 
-void	close_all_pipes(int **pipes, int pipe_count)
+void	 close_all_pipes(int **pipes, int pipe_count)
 {
 	int	i;
 

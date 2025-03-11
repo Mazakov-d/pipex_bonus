@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_parsing.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 22:55:12 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/03/10 16:56:22 by dmazari          ###   ########.fr       */
+/*   Updated: 2025/03/11 16:23:05 by dorianmazar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	count_flags(char **args, int i)
 	return (count);
 }
 
-char	**parse_cmd_args(char **args, int *i, int j, int k)
+char	** parse_cmd_args(char **args, int *i, int j, int k, int *cmd_parsed)
 {
 	char	**cmd;
 
@@ -70,6 +70,7 @@ char	**parse_cmd_args(char **args, int *i, int j, int k)
 	{
 		if (is_flag(args[*i]) == 0 || is_grep(cmd[0], &k) == 0)
 		{
+			*cmd_parsed = *cmd_parsed + 1;
 			cmd[j] = ft_strndup(args[*i], ft_strclen(args[*i], 0));
 			if (!cmd[j])
 				return (free_str_array(cmd));
@@ -83,9 +84,9 @@ char	**parse_cmd_args(char **args, int *i, int j, int k)
 	return (cmd);
 }
 
-t_cmd *cmd_new(t_cmd *current, int position)
+t_cmd	*cmd_new(t_cmd *current, int position)
 {
-    t_cmd *next;
+    t_cmd	*next;
 
     next = malloc(sizeof(t_cmd));
     if (!next)
@@ -93,44 +94,45 @@ t_cmd *cmd_new(t_cmd *current, int position)
     if (position == 0)
         current->prev = NULL;
     current->next = next;
-    current->position = position;
+    current->position = position - 1;
+    next->position = position;
     next->prev = current;
     next->args = NULL;
     next->next = NULL;
-    next->position = position + 1;
     return (next);
 }
-
 t_cmd	*parse_commands(char **args, int cmd_count)
 {
-	t_cmd	*cmd;
-	t_cmd	*save;
-	int		i;
-	int		position;
-	int     cmd_parsed;
+    t_cmd	*cmd;
+    t_cmd	*save;
+    int		i;
+    int		position;
+    int     cmd_parsed;
 
-	if (!args || !args[0] || cmd_count <= 0)
-		return (NULL);
-	cmd = malloc(sizeof(t_cmd));
-	if (!cmd)
-		return (NULL);
-	save = cmd;
-	i = 0;
-	position = 0;
-	cmd_parsed = 0;
-	while (args && args[i] && cmd_parsed < cmd_count)
-	{
-		cmd->args = parse_cmd_args(args, &i, 0, 0);
-		if (!cmd->args)
-			return (free_cmd_list(save));
-		cmd_parsed++;
-		if (cmd_parsed >= cmd_count)
-			break;
-		cmd = cmd_new(cmd, position);
-		if (!cmd)
-			return (free_cmd_list(save));
-		position++;
-	}
-	cmd->next = NULL;
-	return (save);
+    if (!args || !args[0] || cmd_count <= 0)
+        return (NULL);
+    cmd = malloc(sizeof(t_cmd));
+    if (!cmd)
+        return (NULL);
+    cmd->position = 0;
+    save = cmd;
+    i = 0;
+    position = 0;
+    cmd_parsed = 0;
+    while (args && args[i] && cmd_parsed < cmd_count)
+    {
+        printf("position : %d\n", position);
+        cmd->args = parse_cmd_args(args, &i, 0, 0, &cmd_parsed);
+        if (!cmd->args)
+            return (free_cmd_list(save));
+        cmd_parsed++;
+        if (cmd_parsed >= cmd_count)
+            break;
+        position++;
+        cmd = cmd_new(cmd, position);
+        if (!cmd)
+            return (free_cmd_list(save));
+    }
+    cmd->next = NULL;
+    return (save);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_execution.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmazari <dmazari@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dorianmazari <dorianmazari@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 23:50:12 by dorianmazar       #+#    #+#             */
-/*   Updated: 2025/03/10 17:00:45 by dmazari          ###   ########.fr       */
+/*   Updated: 2025/03/11 15:52:51 by dorianmazar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ void	setup_cmd_pipes(t_data *data, t_cmd *cmd)
 	int	i;
 
 	position = cmd->position;
+	printf("position : %d\n", position);
 	if (position == 0)
 	{
 		if (dup2(data->fd.in_file, STDIN_FILENO) == -1)
